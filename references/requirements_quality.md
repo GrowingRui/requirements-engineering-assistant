@@ -57,7 +57,8 @@ How the script treats recorded issues:
 ## 4. Quality scores
 
 Each requirement (except `rejected`) gets 0–2 per characteristic. `null` means not applicable
-and does not count. The overall percentage is points over applicable points. It is a guide, not
+and does not count. A `deferred` requirement is not expected to have stories or criteria yet:
+its verifiability is not applicable and its traceability needs only a source. The overall percentage is points over applicable points. It is a guide, not
 a certification.
 
 ### Judged by you (in `quality_assessments`, reason required)

@@ -67,6 +67,21 @@ class FullDocumentTest(unittest.TestCase):
         req(self.doc, "NFR-001")["status"] = "rejected"
         self.assertIsNone(assess(self.doc).get("NFR-001"))
 
+    def test_deferred_requirement_is_not_penalised_for_missing_links(self):
+        r = req(self.doc, "NFR-001")
+        r["status"], r["source"] = "deferred", "user input"
+        r.pop("fit_criterion", None)
+        self.doc["acceptance_criteria"] = [ac for ac in self.doc["acceptance_criteria"]
+                                           if "NFR-001" not in ac["requirement_ids"]]
+        result = assess(self.doc).get("NFR-001")
+        self.assertIsNone(result.scores["verifiability"].value)
+        self.assertEqual(result.scores["traceability"].value, 2)
+
+    def test_deferred_requirement_without_source_still_scores_zero(self):
+        r = req(self.doc, "NFR-001")
+        r["status"], r["origin"], r["source"] = "deferred", "suggested", ""
+        self.assertEqual(assess(self.doc).get("NFR-001").scores["traceability"].value, 0)
+
 
 class UnambiguityTest(unittest.TestCase):  # scenario 2
     def setUp(self):

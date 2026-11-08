@@ -1,0 +1,595 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "name": "Rock Identification App",
+    "overview": "A phone app for hobby rock and mineral collectors. A collector photographs a rock, the app identifies it with a cloud AI model and shows how confident it is, and the collector keeps a personal collection of their finds on the phone. The app must be usable in the field without signal.",
+    "mode": "interactive",
+    "scope_in": [
+      "Rock and mineral identification from a photo",
+      "Personal collection of finds, stored on the phone",
+      "Use in the field without signal"
+    ],
+    "scope_out": [
+      "User accounts and cloud sync (first release)",
+      "Administrator tools for correcting rock descriptions (later release)"
+    ],
+    "clarification_round": 1
+  },
+  "stakeholders": [
+    {
+      "id": "SH-001",
+      "name": "Collector",
+      "description": "Hobby rockhound aged 8 or older who photographs, identifies and collects rocks and minerals, often in the field without signal.",
+      "permissions": ["identify rocks from photos", "save finds to their own collection", "view their own collection"],
+      "origin": "confirmed"
+    },
+    {
+      "id": "SH-002",
+      "name": "Administrator",
+      "description": "Maintains the rock descriptions. Planned for a later release.",
+      "permissions": ["correct rock descriptions"],
+      "origin": "confirmed"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FR-001",
+      "type": "functional",
+      "title": "Identify a rock from a photo",
+      "description": "A collector shall be able to take or choose a photo of a rock or mineral and receive the name of the rock or mineral that the identification ranks first.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input, input.md line 5; clarification round 1",
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "FR-002",
+      "type": "functional",
+      "title": "Show identification confidence",
+      "description": "The app shall show its confidence in each identification it gives.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input, input.md line 7; clarification round 1",
+      "depends_on": ["FR-001"],
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "FR-003",
+      "type": "functional",
+      "title": "Save a find to the collection",
+      "description": "A collector shall be able to save an identified rock to their collection with its photo, its name and, if location access is allowed, the place where it was found.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input, input.md lines 9-10; clarification round 1",
+      "depends_on": ["FR-001"],
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "FR-004",
+      "type": "functional",
+      "title": "Save identified rocks to the collection",
+      "description": "A collector shall be able to save identified rocks to their personal collection.",
+      "priority": "unset",
+      "origin": "confirmed",
+      "status": "rejected",
+      "source": "user input, input.md line 11",
+      "rationale": "Duplicate of FR-003 (ISS-006).",
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "FR-005",
+      "type": "functional",
+      "title": "Correct rock descriptions",
+      "description": "An administrator shall be able to correct wrong rock descriptions in the rock database.",
+      "priority": "wont",
+      "origin": "confirmed",
+      "status": "deferred",
+      "source": "user input, input.md line 18; clarification round 1",
+      "rationale": "The user wants this in a later release.",
+      "stakeholders": ["SH-002"]
+    },
+    {
+      "id": "FR-006",
+      "type": "functional",
+      "title": "Identify offline photos later",
+      "description": "When a photo is taken without an internet connection, the app shall keep it and identify it automatically once a connection is available, without the collector taking the photo again.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "clarification round 1",
+      "rationale": "Settles the conflict between offline use and the cloud model (ISS-001).",
+      "depends_on": ["FR-001"],
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "FR-007",
+      "type": "functional",
+      "title": "Photo sources, formats and size",
+      "description": "The app shall accept photos from the camera or the phone's gallery in JPEG, PNG or HEIC format of at most 20 MB, and refuse any other photo with a message that states the allowed formats and size.",
+      "priority": "unset",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "clarification round 1",
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "NFR-001",
+      "type": "non_functional",
+      "title": "Offline use in the field",
+      "description": "Taking photos and viewing the collection shall work without an internet connection.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input, input.md lines 13-14; clarification round 1",
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "NFR-002",
+      "type": "non_functional",
+      "title": "Identification accuracy",
+      "description": "Identification results shall be accurate.",
+      "priority": "unset",
+      "origin": "confirmed",
+      "status": "needs_clarification",
+      "source": "user input, input.md line 6",
+      "rationale": "The user wants trustworthy results but does not know a realistic target (ISS-003).",
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "NFR-003",
+      "type": "non_functional",
+      "title": "Identification speed",
+      "description": "The app shall show an identification result within 5 seconds of the photo being taken when a connection is available.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input, input.md line 16; clarification round 1",
+      "fit_criterion": "95% of identifications on a 4G connection show a result within 5 seconds of the photo being taken.",
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "NFR-004",
+      "type": "non_functional",
+      "title": "Usable by first-time collectors aged 8+",
+      "description": "First-time collectors aged 8 or older shall be able to identify a rock and save it to their collection without help.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input, input.md line 16; clarification round 1",
+      "fit_criterion": "In a usability test, at least 8 of 10 first-time users aged 8 or older identify a rock and save it to their collection without help within 2 minutes.",
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "NFR-005",
+      "type": "non_functional",
+      "title": "Find locations stay private",
+      "description": "The app shall record a find location only after the collector allows location access, and shall never send find locations off the phone.",
+      "priority": "unset",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "clarification round 1",
+      "stakeholders": ["SH-001"]
+    }
+  ],
+  "rules": [
+    {
+      "id": "CON-001",
+      "kind": "constraint",
+      "statement": "Identification uses an AI model that runs in the cloud.",
+      "origin": "confirmed",
+      "source": "user input, input.md line 6",
+      "related": ["FR-001", "FR-006", "NFR-002"]
+    },
+    {
+      "id": "CON-002",
+      "kind": "constraint",
+      "statement": "Hosting and AI service costs must not exceed 10 EUR per month.",
+      "origin": "confirmed",
+      "source": "user input, input.md line 20; clarification round 1",
+      "related": ["CON-001"]
+    },
+    {
+      "id": "CON-003",
+      "kind": "constraint",
+      "statement": "The collection is stored only on the phone; the first release has no user accounts.",
+      "origin": "confirmed",
+      "source": "clarification round 1",
+      "related": ["FR-003", "NFR-005"]
+    },
+    {
+      "id": "ASM-001",
+      "kind": "assumption",
+      "statement": "Collectors use a smartphone with a camera.",
+      "origin": "assumed",
+      "source": "",
+      "related": ["FR-001"]
+    },
+    {
+      "id": "ASM-002",
+      "kind": "assumption",
+      "statement": "The app is a mobile app for Android and iOS.",
+      "origin": "assumed",
+      "source": "",
+      "related": []
+    }
+  ],
+  "issues": [
+    {
+      "id": "ISS-001",
+      "kind": "conflict",
+      "severity": "critical",
+      "status": "resolved",
+      "requirement_ids": ["NFR-001", "CON-001"],
+      "description": "NFR-001 said the app works completely offline in the field, but CON-001 says identification runs on an AI model in the cloud, which needs an internet connection. Both cannot hold.",
+      "question": "In the field without signal, which parts must still work?",
+      "suggestion": "Taking photos and viewing the collection work offline; photos taken offline are identified automatically once the phone is back online.",
+      "resolution": "Taking photos and viewing the collection work offline (NFR-001); offline photos are identified automatically later (FR-006)."
+    },
+    {
+      "id": "ISS-002",
+      "kind": "conflict",
+      "severity": "important",
+      "status": "resolved",
+      "requirement_ids": ["CON-001", "CON-002"],
+      "description": "A cloud AI model has running costs, but CON-002 said the owner does not want to pay for servers.",
+      "question": "What is the most you are willing to pay per month for hosting and the AI service?",
+      "suggestion": "Use a hosted AI service with a free tier and cap spending at 20 EUR per month.",
+      "resolution": "Costs are capped at 10 EUR per month (CON-002)."
+    },
+    {
+      "id": "ISS-003",
+      "kind": "ambiguity",
+      "severity": "important",
+      "status": "accepted_risk",
+      "requirement_ids": ["NFR-002"],
+      "description": "'Accurate' has no measurable target, so nobody can test whether the identification is good enough.",
+      "missing_information": "An accuracy metric, a target value and the test set.",
+      "question": "How often must the app name the right rock?",
+      "suggestion": "The correct name is among the top 3 suggestions for at least 85% of photos in a test set of the 100 most common rocks and minerals.",
+      "resolution": "The user does not know a realistic target and accepts the risk; the developers set it after testing candidate models."
+    },
+    {
+      "id": "ISS-004",
+      "kind": "ambiguity",
+      "severity": "important",
+      "status": "resolved",
+      "requirement_ids": ["NFR-003"],
+      "description": "'Fast' had no time target.",
+      "missing_information": "A response-time target and the conditions it applies to.",
+      "question": "What is the longest acceptable wait for an identification result: 2 s, 5 s or 10 s?",
+      "suggestion": "95% of identifications return a result within 5 seconds of taking the photo on a 4G connection.",
+      "resolution": "Suggestion accepted: 95% of results within 5 seconds on 4G (NFR-003 fit criterion)."
+    },
+    {
+      "id": "ISS-005",
+      "kind": "ambiguity",
+      "severity": "important",
+      "status": "resolved",
+      "requirement_ids": ["NFR-004"],
+      "description": "'Easy to use, even for kids' named no task, age or success rate.",
+      "missing_information": "The user group (age), the task and a success rate.",
+      "question": "From what age must children manage the app without help?",
+      "suggestion": "In a usability test, at least 8 of 10 first-time users aged 10 or older identify a rock and save it to their collection without help within 2 minutes.",
+      "resolution": "Suggestion accepted with the age changed to 8 or older (NFR-004 fit criterion)."
+    },
+    {
+      "id": "ISS-006",
+      "kind": "duplicate",
+      "severity": "optional",
+      "status": "resolved",
+      "requirement_ids": ["FR-003", "FR-004"],
+      "description": "FR-004 repeats FR-003 (input.md lines 9-11 say the same thing twice); FR-003 is the more detailed one.",
+      "suggestion": "Keep FR-003 and reject FR-004.",
+      "resolution": "FR-004 rejected and merged into FR-003; the user was told in round 1 and did not object."
+    },
+    {
+      "id": "ISS-007",
+      "kind": "missing_information",
+      "severity": "important",
+      "status": "resolved",
+      "requirement_ids": ["FR-001"],
+      "description": "Photo sources, formats and size limits were not stated.",
+      "missing_information": "Allowed photo sources, file formats and maximum file size.",
+      "question": "Which photos can be used, and how large may they be?",
+      "suggestion": "Photos from the camera or the phone's gallery; JPEG, PNG or HEIC; at most 10 MB.",
+      "resolution": "Camera or gallery; JPEG, PNG or HEIC; at most 20 MB (FR-007)."
+    },
+    {
+      "id": "ISS-008",
+      "kind": "missing_information",
+      "severity": "important",
+      "status": "resolved",
+      "requirement_ids": ["FR-003"],
+      "description": "FR-003 stores where a rock was found, which is personal location data, and it was not stated where the collection is kept (on the phone or in an online account).",
+      "missing_information": "Storage location of the collection, need for accounts, and privacy of find locations.",
+      "question": "Where is the collection stored, and who may see the find locations?",
+      "suggestion": "The collection is stored only on the phone, with no user account in the first release; a find location is saved only if the collector allows location access, and it never leaves the phone.",
+      "resolution": "Suggestion accepted (CON-003, NFR-005)."
+    },
+    {
+      "id": "ISS-009",
+      "kind": "missing_information",
+      "severity": "optional",
+      "status": "resolved",
+      "requirement_ids": ["FR-005"],
+      "description": "The administrator role was mentioned as 'later maybe'; it was unclear whether it belongs to the first release.",
+      "question": "Is the administrator part of the first release?",
+      "suggestion": "No; the administrator is planned for a later release.",
+      "resolution": "The user said the admin can wait for a later version; FR-005 deferred."
+    },
+    {
+      "id": "ISS-010",
+      "kind": "missing_information",
+      "severity": "optional",
+      "status": "open",
+      "requirement_ids": ["FR-002"],
+      "description": "Nothing says what the app does when it is unsure about an identification.",
+      "question": "What should the app show when its confidence is low?",
+      "suggestion": "Below 60% confidence, show the top 3 candidates and say that the result is uncertain."
+    },
+    {
+      "id": "ISS-011",
+      "kind": "missing_information",
+      "severity": "optional",
+      "status": "open",
+      "requirement_ids": ["NFR-004"],
+      "description": "Children may use the app, but no rules for young users are stated.",
+      "question": "Are there extra rules for young users, such as parental consent before saving find locations?",
+      "suggestion": "No extra rules in the first release, because there are no accounts and find locations never leave the phone."
+    },
+    {
+      "id": "ISS-012",
+      "kind": "missing_information",
+      "severity": "optional",
+      "status": "open",
+      "requirement_ids": ["FR-003", "CON-003"],
+      "description": "Because the collection is stored only on the phone (CON-003), it is lost if the phone is lost or replaced.",
+      "missing_information": "Whether collectors need a backup or export of their collection.",
+      "question": "Should collectors be able to back up or export their collection?",
+      "suggestion": "Not in the first release; consider an export of photos and a list of finds in a later release."
+    }
+  ],
+  "user_stories": [
+    {
+      "id": "US-001",
+      "role": "Collector",
+      "goal": "photograph a rock and see its name and how sure the app is",
+      "benefit": "I can name my finds without asking an expert",
+      "requirement_ids": ["FR-001", "FR-002", "FR-007"],
+      "priority": "must"
+    },
+    {
+      "id": "US-002",
+      "role": "Collector",
+      "goal": "save a find with its photo, name and the place I found it",
+      "benefit": "I remember what I found and where",
+      "requirement_ids": ["FR-003"],
+      "priority": "must"
+    },
+    {
+      "id": "US-003",
+      "role": "Collector",
+      "goal": "take photos in the field without signal and get them identified later",
+      "benefit": "I never miss a find just because there is no signal",
+      "requirement_ids": ["FR-006"],
+      "priority": "must",
+      "description": "Needs US-001 (identification) first."
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-001", "FR-002", "NFR-003"],
+      "title": "Identify a rock from a camera photo",
+      "type": "positive",
+      "given": ["the phone has a 4G connection", "the collector has the camera open in the app"],
+      "when": ["they take a photo of a piece of quartz"],
+      "then": ["a rock or mineral name is shown within 5 seconds", "a confidence value from 0% to 100% is shown next to the name"]
+    },
+    {
+      "id": "AC-002",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-001", "FR-007"],
+      "title": "Identify a rock from a gallery photo",
+      "type": "positive",
+      "given": ["the phone's gallery contains a 4 MB JPEG photo of a rock", "the phone has an internet connection"],
+      "when": ["the collector chooses that photo in the app"],
+      "then": ["the photo is accepted", "a rock or mineral name and its confidence are shown"]
+    },
+    {
+      "id": "AC-003",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-007"],
+      "title": "Photo of exactly 20 MB is accepted",
+      "type": "boundary",
+      "given": ["the gallery contains a HEIC photo of exactly 20 MB"],
+      "when": ["the collector chooses that photo"],
+      "then": ["the photo is accepted for identification"]
+    },
+    {
+      "id": "AC-004",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-007"],
+      "title": "Photo larger than 20 MB is refused",
+      "type": "boundary",
+      "given": ["the gallery contains a JPEG photo of 20.1 MB"],
+      "when": ["the collector chooses that photo"],
+      "then": ["the photo is not sent for identification", "the message \"Photos must be JPEG, PNG or HEIC and 20 MB or smaller.\" is shown"]
+    },
+    {
+      "id": "AC-005",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-007"],
+      "title": "Unsupported format is refused",
+      "type": "negative",
+      "given": ["the gallery contains a 2 MB GIF image"],
+      "when": ["the collector chooses that image"],
+      "then": ["the image is not sent for identification", "the message \"Photos must be JPEG, PNG or HEIC and 20 MB or smaller.\" is shown"]
+    },
+    {
+      "id": "AC-006",
+      "story_id": "US-002",
+      "requirement_ids": ["FR-003", "NFR-005"],
+      "title": "Save a find with its location",
+      "type": "positive",
+      "given": ["a rock has been identified as quartz", "the collector has allowed location access"],
+      "when": ["they save the find"],
+      "then": ["the collection contains a new entry with the photo, the name \"quartz\" and the current location"]
+    },
+    {
+      "id": "AC-007",
+      "story_id": "US-002",
+      "requirement_ids": ["FR-003", "NFR-005"],
+      "title": "Save a find without location access",
+      "type": "negative",
+      "given": ["a rock has been identified as quartz", "the collector has refused location access"],
+      "when": ["they save the find"],
+      "then": ["the collection contains a new entry with the photo and the name \"quartz\"", "the entry has no location"]
+    },
+    {
+      "id": "AC-008",
+      "story_id": "US-001",
+      "requirement_ids": ["NFR-005"],
+      "title": "No location is sent for identification",
+      "type": "negative",
+      "given": ["the collector has allowed location access", "the camera stores GPS coordinates in its photos"],
+      "when": ["a photo is sent to the AI service for identification"],
+      "then": ["the data sent contains no GPS coordinates or other location"]
+    },
+    {
+      "id": "AC-009",
+      "story_id": "US-003",
+      "requirement_ids": ["FR-006", "NFR-001"],
+      "title": "Take a photo and browse the collection without signal",
+      "type": "positive",
+      "given": ["the phone has no internet connection", "the collection contains 3 saved finds"],
+      "when": ["the collector takes a photo of a rock", "then opens the collection"],
+      "then": ["the new photo is kept and marked \"waiting for identification\"", "all 3 saved finds are shown with their photos and names"]
+    },
+    {
+      "id": "AC-010",
+      "story_id": "US-003",
+      "requirement_ids": ["FR-006"],
+      "title": "Waiting photo is identified when the connection returns",
+      "type": "positive",
+      "given": ["one photo is marked \"waiting for identification\""],
+      "when": ["the phone gets an internet connection"],
+      "then": ["the photo is identified without the collector taking it again", "its name and confidence are shown and the \"waiting for identification\" mark is removed"]
+    },
+    {
+      "id": "AC-011",
+      "story_id": "US-003",
+      "requirement_ids": ["FR-006"],
+      "title": "Connection lost during identification",
+      "type": "negative",
+      "given": ["a waiting photo is being sent for identification"],
+      "when": ["the internet connection drops before a result arrives"],
+      "then": ["the photo stays marked \"waiting for identification\"", "it is sent again the next time a connection is available"]
+    }
+  ],
+  "quality_assessments": [
+    {
+      "requirement_id": "FR-001",
+      "scores": {"clarity": 2, "completeness": 2, "feasibility": 1},
+      "reasons": {
+        "clarity": "One actor, one action and one result.",
+        "completeness": "Photo sources and limits are settled in FR-007.",
+        "feasibility": "Depends on finding a cloud AI service that identifies rocks within the 10 EUR monthly budget (CON-002)."
+      }
+    },
+    {
+      "requirement_id": "FR-002",
+      "scores": {"clarity": 2, "completeness": 1, "feasibility": 2},
+      "reasons": {
+        "clarity": "Clear what must be shown and when.",
+        "completeness": "Behaviour for low-confidence results is still open (ISS-010).",
+        "feasibility": "Identification models return a confidence value with each result."
+      }
+    },
+    {
+      "requirement_id": "FR-003",
+      "scores": {"clarity": 2, "completeness": 1, "feasibility": 2},
+      "reasons": {
+        "clarity": "Saved fields and the location condition are stated.",
+        "completeness": "Backup or export of the collection is still open (ISS-012).",
+        "feasibility": "Local storage of photos and a few fields is standard on phones."
+      }
+    },
+    {
+      "requirement_id": "FR-005",
+      "scores": {"clarity": 1, "completeness": 0, "feasibility": null},
+      "reasons": {
+        "clarity": "\"Wrong rock descriptions\" does not say who decides what is wrong.",
+        "completeness": "Deferred: where the descriptions come from and how corrections reach the app are not defined.",
+        "feasibility": "No basis to judge until the source of the rock descriptions is known."
+      }
+    },
+    {
+      "requirement_id": "FR-006",
+      "scores": {"clarity": 2, "completeness": 1, "feasibility": 2},
+      "reasons": {
+        "clarity": "Trigger, action and the no-retake condition are explicit.",
+        "completeness": "No limit is set on how many waiting photos may be kept.",
+        "feasibility": "A local queue with retry on reconnect is a common mobile pattern."
+      }
+    },
+    {
+      "requirement_id": "FR-007",
+      "scores": {"clarity": 2, "completeness": 2, "feasibility": 2},
+      "reasons": {
+        "clarity": "Sources, formats, size and refusal behaviour are listed.",
+        "completeness": "Covers accepted and refused photos.",
+        "feasibility": "Format and size checks are simple to implement."
+      }
+    },
+    {
+      "requirement_id": "NFR-001",
+      "scores": {"clarity": 2, "completeness": 2, "feasibility": 2},
+      "reasons": {
+        "clarity": "Names exactly which functions work offline.",
+        "completeness": "Offline identification is handled by FR-006.",
+        "feasibility": "Camera and local storage need no connection."
+      }
+    },
+    {
+      "requirement_id": "NFR-002",
+      "scores": {"clarity": 0, "completeness": 0, "feasibility": null},
+      "reasons": {
+        "clarity": "\"Accurate\" has no metric, so it can be read in many ways.",
+        "completeness": "No target or test set; the user accepted leaving it open (ISS-003).",
+        "feasibility": "Cannot be judged without a target."
+      }
+    },
+    {
+      "requirement_id": "NFR-003",
+      "scores": {"clarity": 2, "completeness": 2, "feasibility": 1},
+      "reasons": {
+        "clarity": "Time limit and condition are stated.",
+        "completeness": "Fit criterion gives percentile, time and network type.",
+        "feasibility": "Upload of photos up to 20 MB over 4G within 5 seconds may require resizing before upload."
+      }
+    },
+    {
+      "requirement_id": "NFR-004",
+      "scores": {"clarity": 2, "completeness": 2, "feasibility": 2},
+      "reasons": {
+        "clarity": "User group, task and condition are stated.",
+        "completeness": "Fit criterion gives sample size, success rate and time limit.",
+        "feasibility": "A two-step task is achievable with a simple interface."
+      }
+    },
+    {
+      "requirement_id": "NFR-005",
+      "scores": {"clarity": 2, "completeness": 2, "feasibility": 2},
+      "reasons": {
+        "clarity": "Two clear conditions on recording and sending location.",
+        "completeness": "Covers consent and data leaving the phone, including photo metadata (AC-008).",
+        "feasibility": "Location permission and removing GPS data from photos are standard."
+      }
+    }
+  ]
+}

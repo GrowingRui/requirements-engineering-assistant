@@ -9,7 +9,9 @@ A score of ``None`` means "not applicable" (or "not assessed" for a judged
 characteristic the agent has not scored yet). Neither counts against the
 requirement. The result is a transparent guide, not an objective measurement.
 
-Rejected requirements are not scored. The functions expect a document that
+Rejected requirements are not scored. Deferred requirements are scored, but
+verifiability is not applicable and traceability needs only a source, because
+stories and criteria are not expected before the requirement is scheduled. The functions expect a document that
 passed ``model.validate``; malformed parts are skipped rather than raising.
 """
 
@@ -171,6 +173,8 @@ def _verifiability(req: Dict[str, Any], stories: List[Dict[str, Any]],
                    acs: List[Dict[str, Any]]) -> Score:
     if req.get("type") == "business":
         return Score("verifiability", None, "Not applicable to business requirements.", "computed")
+    if req.get("status") == "deferred" and not acs and not _filled(req.get("fit_criterion")):
+        return Score("verifiability", None, "Not applicable while deferred.", "computed")
     if acs and _filled(req.get("fit_criterion")):
         return Score("verifiability", 2, f"Has acceptance criteria ({_ids(acs)}) and a fit criterion.",
                      "computed")
@@ -202,6 +206,8 @@ def _traceability(req: Dict[str, Any], links: List[str]) -> Score:
         return Score("traceability", 0, "No source recorded.", "computed")
     if links:
         return Score("traceability", 2, f"Has a source and is linked to {', '.join(links)}.", "computed")
+    if req.get("status") == "deferred":
+        return Score("traceability", 2, "Has a source; links are not expected while deferred.", "computed")
     return Score("traceability", 1, "Has a source but is not linked to any parent, child, story or criterion.",
                  "computed")
 

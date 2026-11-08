@@ -99,7 +99,8 @@ Status guide:
 - `draft`: extracted, no open blocker.
 - `needs_clarification`: an open issue blocks it.
 - `approved`: confirmed by the user and ready. Only for `confirmed` requirements.
-- `deferred`: not for this release. Traceability checks skip it.
+- `deferred`: not for this release. Traceability checks skip it, and its score does not count
+  missing stories or criteria.
 - `rejected`: dropped. Kept for history; not scored or linted.
 
 Write one testable statement per requirement: "The system shall ..." or "A collector shall be
