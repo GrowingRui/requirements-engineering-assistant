@@ -1,4 +1,4 @@
-"""Tests that SKILL.md and references/ stay in sync with the code.
+"""Tests that SKILL.md, references/ and README.md stay in sync with the code.
 
 Checks the SKILL.md front matter and length, that every ``rea.py`` command and
 option mentioned in the docs exists, that the documented workflow commands
@@ -170,6 +170,45 @@ class LinksTest(unittest.TestCase):
         self.assertEqual(on_disk, set(REFERENCE_FILES))
         for name in REFERENCE_FILES:
             self.assertIn(f"references/{name}", links)
+
+
+README_PATH = os.path.join(ROOT, "README.md")
+FENCED_REA = re.compile(r"^python\s+scripts/rea\.py\s+(.+)$", re.MULTILINE)
+
+
+class ReadmeTest(unittest.TestCase):
+    def setUp(self):
+        self.text = read(README_PATH)
+
+    def test_shell_examples_use_real_commands_and_options(self):
+        options = subcommand_options()
+        calls = [shlex.split(m) for m in FENCED_REA.findall(self.text)]
+        self.assertEqual({tokens[0] for tokens in calls}, set(options))
+        for tokens in calls:
+            with self.subTest(command=" ".join(tokens)):
+                for token in tokens[1:]:
+                    if token.startswith("--"):
+                        self.assertIn(token, options[tokens[0]])
+
+    def test_documented_options_exist(self):
+        all_options = set().union(*subcommand_options().values())
+        for option in set(re.findall(r"`(--[a-z-]+)", self.text)):
+            with self.subTest(option=option):
+                self.assertIn(option, all_options)
+
+    def test_links_resolve(self):
+        for target in LINK.findall(self.text):
+            if target.startswith(("http://", "https://", "#")):
+                continue
+            with self.subTest(link=target):
+                self.assertTrue(os.path.exists(os.path.join(ROOT, target.split("#")[0])))
+
+    def test_anchors_exist(self):
+        headings = {re.sub(r"[^a-z0-9 -]", "", h.lower()).replace(" ", "-")
+                    for h in re.findall(r"^#{2,3} (.+)$", self.text, re.MULTILINE)}
+        for anchor in re.findall(r"\]\(#([^)]+)\)", self.text):
+            with self.subTest(anchor=anchor):
+                self.assertIn(anchor, headings)
 
 
 class ReferenceContentTest(unittest.TestCase):

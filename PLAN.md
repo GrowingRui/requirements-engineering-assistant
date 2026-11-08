@@ -1,6 +1,6 @@
 # Requirements Engineering Assistant: Implementation Plan
 
-Status: **draft for review**. Nothing gets built until this plan is approved.
+Status: **approved and built** (phases 0–7). Kept as the design record for version 0.1.0.
 
 ---
 
