@@ -174,6 +174,12 @@ class ScanTest(TempDirTest):
         self.assertIn("'easy to use'", out)
         self.assertNotIn("line 3", out)
 
+    def test_summary_uses_correct_plural(self):
+        src = self.write("one.md", "The app must be fast.\n")
+        self.assertIn("1 vague word or weak phrase found", run("scan", src)[1])
+        src = self.write("two.md", "The app must be fast and secure.\n")
+        self.assertIn("2 vague words or weak phrases found", run("scan", src)[1])
+
     def test_json_output(self):
         src = self.write("input.md", VAGUE_INPUT)
         code, data, _ = run_json("scan", src)

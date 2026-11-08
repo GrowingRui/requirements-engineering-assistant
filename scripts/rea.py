@@ -144,7 +144,8 @@ def cmd_scan(args: argparse.Namespace, out: TextIO, err: TextIO) -> int:
     if not results:
         print(f"{name}: no vague words or weak phrases found.", file=out)
         return EXIT_OK
-    print(f"{name}: {_plural(len(results), 'vague word or weak phrase')} found", file=out)
+    found = "1 vague word or weak phrase" if len(results) == 1 else f"{len(results)} vague words or weak phrases"
+    print(f"{name}: {found} found", file=out)
     for r in results:
         print(f"  line {r['line']}, col {r['column']}: '{r['term']}' ({r['kind']}) - {r['missing']}", file=out)
         print(f"      {r['context']}", file=out)
