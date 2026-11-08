@@ -1,0 +1,703 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Requirements Engineering Assistant: requirements.json",
+  "description": "Schema version 1.0. Generated from scripts/reqkit/model.py; do not edit by hand. Cross-references, unique IDs and dependency cycles are only checked by 'rea.py validate'.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project",
+    "requirements"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "project": {
+      "$ref": "#/$defs/project"
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/requirement"
+      }
+    },
+    "stakeholders": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/stakeholder"
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/issue"
+      }
+    },
+    "user_stories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/user_story"
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/acceptance_criterion"
+      }
+    },
+    "quality_assessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/quality_assessment"
+      }
+    }
+  },
+  "$defs": {
+    "project": {
+      "type": "object",
+      "description": "Project metadata.",
+      "required": [
+        "name",
+        "overview",
+        "mode"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "overview": {
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "interactive",
+            "automatic"
+          ]
+        },
+        "scope_in": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          }
+        },
+        "scope_out": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          }
+        },
+        "clarification_round": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "stakeholder": {
+      "type": "object",
+      "description": "A stakeholder or user role.",
+      "required": [
+        "id",
+        "name",
+        "origin"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(SH)-\\d{3,}$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "description": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          }
+        },
+        "origin": {
+          "enum": [
+            "confirmed",
+            "assumed",
+            "suggested",
+            "open"
+          ]
+        }
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "description": "A business, user, functional or non-functional requirement.",
+      "required": [
+        "id",
+        "type",
+        "title",
+        "description",
+        "priority",
+        "origin",
+        "status",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(FR|NFR|BR|UR)-\\d{3,}$"
+        },
+        "type": {
+          "enum": [
+            "functional",
+            "non_functional",
+            "business",
+            "user"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "description": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "priority": {
+          "enum": [
+            "must",
+            "should",
+            "could",
+            "wont",
+            "unset"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "confirmed",
+            "assumed",
+            "suggested",
+            "open"
+          ]
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "needs_clarification",
+            "approved",
+            "deferred",
+            "rejected"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "fit_criterion": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+          }
+        },
+        "derived_from": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+          }
+        },
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "functional"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "pattern": "^(FR)-\\d{3,}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "non_functional"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "pattern": "^(NFR)-\\d{3,}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "business"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "pattern": "^(BR)-\\d{3,}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "user"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "pattern": "^(UR)-\\d{3,}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "approved"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "origin": {
+                "const": "confirmed"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "origin": {
+                "const": "confirmed"
+              }
+            },
+            "required": [
+              "origin"
+            ]
+          },
+          "then": {
+            "required": [
+              "source"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "pattern": "\\S"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "rule": {
+      "type": "object",
+      "description": "A business rule, constraint or assumption.",
+      "required": [
+        "id",
+        "kind",
+        "statement",
+        "origin",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(BRL|CON|ASM)-\\d{3,}$"
+        },
+        "kind": {
+          "enum": [
+            "business_rule",
+            "constraint",
+            "assumption"
+          ]
+        },
+        "statement": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "origin": {
+          "enum": [
+            "confirmed",
+            "assumed",
+            "suggested",
+            "open"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "business_rule"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "pattern": "^(BRL)-\\d{3,}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "constraint"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "pattern": "^(CON)-\\d{3,}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "assumption"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "pattern": "^(ASM)-\\d{3,}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "origin": {
+                "const": "confirmed"
+              }
+            },
+            "required": [
+              "origin"
+            ]
+          },
+          "then": {
+            "required": [
+              "source"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "pattern": "\\S"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "issue": {
+      "type": "object",
+      "description": "A quality problem: ambiguity, missing information, conflict, ...",
+      "required": [
+        "id",
+        "kind",
+        "severity",
+        "status",
+        "requirement_ids",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(ISS)-\\d{3,}$"
+        },
+        "kind": {
+          "enum": [
+            "ambiguity",
+            "missing_information",
+            "conflict",
+            "duplicate",
+            "overlap",
+            "terminology",
+            "dependency"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "important",
+            "optional"
+          ]
+        },
+        "status": {
+          "enum": [
+            "open",
+            "resolved",
+            "accepted_risk"
+          ]
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+          }
+        },
+        "description": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "missing_information": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "suggestion": {
+          "type": "string"
+        },
+        "resolution": {
+          "type": "string"
+        }
+      }
+    },
+    "user_story": {
+      "type": "object",
+      "description": "A user story linked to requirements.",
+      "required": [
+        "id",
+        "role",
+        "goal",
+        "benefit",
+        "requirement_ids",
+        "priority"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(US)-\\d{3,}$"
+        },
+        "role": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "goal": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "benefit": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+          }
+        },
+        "priority": {
+          "enum": [
+            "must",
+            "should",
+            "could",
+            "wont",
+            "unset"
+          ]
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "acceptance_criterion": {
+      "type": "object",
+      "description": "A Given/When/Then acceptance criterion for a user story.",
+      "required": [
+        "id",
+        "story_id",
+        "requirement_ids",
+        "title",
+        "type",
+        "given",
+        "when",
+        "then"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(AC)-\\d{3,}$"
+        },
+        "story_id": {
+          "type": "string",
+          "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+          }
+        },
+        "title": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "type": {
+          "enum": [
+            "positive",
+            "negative",
+            "boundary"
+          ]
+        },
+        "given": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 1
+        },
+        "when": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 1
+        },
+        "then": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "quality_assessment": {
+      "type": "object",
+      "description": "Agent-judged quality scores (0-2) with reasons for one requirement.",
+      "required": [
+        "requirement_id",
+        "scores",
+        "reasons"
+      ],
+      "properties": {
+        "requirement_id": {
+          "type": "string",
+          "pattern": "^([A-Z]{2,4})-(\\d{3,})$"
+        },
+        "scores": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "clarity",
+              "completeness",
+              "feasibility"
+            ]
+          },
+          "additionalProperties": {
+            "enum": [
+              0,
+              1,
+              2,
+              null
+            ]
+          }
+        },
+        "reasons": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

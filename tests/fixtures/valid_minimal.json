@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "name": "Minimal",
+    "overview": "",
+    "mode": "automatic"
+  },
+  "requirements": [
+    {
+      "id": "FR-001",
+      "type": "functional",
+      "title": "Export report",
+      "description": "The system shall export the monthly report as a PDF file.",
+      "priority": "must",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    }
+  ]
+}

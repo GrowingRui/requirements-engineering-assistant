@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Dependencies", "overview": "", "mode": "automatic"},
+  "requirements": [
+    {"id": "FR-001", "type": "functional", "title": "A", "description": "Step A.",
+     "priority": "must", "origin": "assumed", "status": "draft", "source": "",
+     "depends_on": ["FR-002"]},
+    {"id": "FR-002", "type": "functional", "title": "B", "description": "Step B.",
+     "priority": "must", "origin": "assumed", "status": "draft", "source": "",
+     "depends_on": ["FR-003"]},
+    {"id": "FR-003", "type": "functional", "title": "C", "description": "Step C.",
+     "priority": "must", "origin": "assumed", "status": "draft", "source": "",
+     "depends_on": ["FR-001"]},
+    {"id": "FR-004", "type": "functional", "title": "D", "description": "Step D.",
+     "priority": "must", "origin": "assumed", "status": "draft", "source": "",
+     "depends_on": ["FR-004", "FR-099"]}
+  ]
+}

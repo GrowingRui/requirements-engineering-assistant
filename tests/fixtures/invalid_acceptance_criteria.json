@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Incomplete AC", "overview": "", "mode": "automatic"},
+  "requirements": [
+    {"id": "FR-001", "type": "functional", "title": "Login",
+     "description": "A user shall log in with email and password.",
+     "priority": "must", "origin": "assumed", "status": "draft", "source": ""}
+  ],
+  "user_stories": [
+    {"id": "US-001", "role": "user", "goal": "log in", "benefit": "I can see my data",
+     "requirement_ids": ["FR-001"], "priority": "must"}
+  ],
+  "acceptance_criteria": [
+    {"id": "AC-001", "story_id": "US-001", "requirement_ids": ["FR-001"], "title": "Empty steps",
+     "type": "positive", "given": [], "when": [], "then": []},
+    {"id": "AC-002", "story_id": "US-001", "requirement_ids": ["FR-001"], "title": "Blank outcome",
+     "type": "negative", "given": ["a wrong password"], "when": ["I log in"], "then": ["   "]},
+    {"id": "AC-003", "story_id": "US-009", "requirement_ids": ["FR-001"], "title": "Unknown story",
+     "type": "positive", "given": ["a valid account"], "when": ["I log in"], "then": ["I see my dashboard"]},
+    {"id": "AC-004", "story_id": "US-001", "requirement_ids": ["FR-001"], "title": "Missing then",
+     "type": "positive", "given": ["a valid account"], "when": ["I log in"]}
+  ]
+}

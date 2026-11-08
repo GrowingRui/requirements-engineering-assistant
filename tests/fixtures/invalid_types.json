@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "", "overview": "", "mode": "batch", "clarification_round": -1},
+  "requirements": [
+    {"id": "FR-1", "type": "functional", "title": 42, "description": "Text.",
+     "priority": "high", "origin": "assumed", "status": "draft", "source": "",
+     "depends_on": "FR-002"},
+    {"id": "NFR-001", "type": "functional", "title": "Wrong prefix", "description": "Text.",
+     "priority": "must", "origin": "assumed", "status": "draft"},
+    "not an object"
+  ],
+  "issues": {"id": "ISS-001"}
+}

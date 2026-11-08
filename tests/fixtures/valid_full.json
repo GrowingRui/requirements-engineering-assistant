@@ -1,0 +1,190 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "name": "Library Room Booking",
+    "overview": "Students book study rooms in the university library.",
+    "mode": "interactive",
+    "scope_in": ["Room booking", "Booking cancellation"],
+    "scope_out": ["Payment"],
+    "clarification_round": 1
+  },
+  "stakeholders": [
+    {
+      "id": "SH-001",
+      "name": "Student",
+      "description": "Enrolled student with a university account.",
+      "permissions": ["create booking", "cancel own booking"],
+      "origin": "confirmed"
+    },
+    {
+      "id": "SH-002",
+      "name": "Librarian",
+      "permissions": ["cancel any booking"],
+      "origin": "confirmed"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "BR-001",
+      "type": "business",
+      "title": "Fair room usage",
+      "description": "The library wants study rooms to be shared fairly between students.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input"
+    },
+    {
+      "id": "FR-001",
+      "type": "functional",
+      "title": "Book a room",
+      "description": "A student shall be able to book a free study room for a time slot of 1 to 3 hours.",
+      "priority": "must",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input",
+      "derived_from": ["BR-001"],
+      "stakeholders": ["SH-001"]
+    },
+    {
+      "id": "FR-002",
+      "type": "functional",
+      "title": "Cancel a booking",
+      "description": "A student shall be able to cancel their own booking until its start time.",
+      "priority": "should",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "clarification round 1",
+      "depends_on": ["FR-001"],
+      "stakeholders": ["SH-001", "SH-002"]
+    },
+    {
+      "id": "NFR-001",
+      "type": "non_functional",
+      "title": "Booking response time",
+      "description": "Booking confirmation shall be shown within the response-time target.",
+      "priority": "should",
+      "origin": "suggested",
+      "status": "draft",
+      "source": "",
+      "fit_criterion": "95% of booking requests complete in under 2 seconds with 200 concurrent users",
+      "rationale": "Suggested by the assistant; not yet confirmed."
+    }
+  ],
+  "rules": [
+    {
+      "id": "BRL-001",
+      "kind": "business_rule",
+      "statement": "A student may hold at most 2 future bookings at the same time.",
+      "origin": "confirmed",
+      "source": "clarification round 1",
+      "related": ["FR-001", "BR-001"]
+    },
+    {
+      "id": "CON-001",
+      "kind": "constraint",
+      "statement": "Login uses the existing university single sign-on.",
+      "origin": "confirmed",
+      "source": "user input"
+    },
+    {
+      "id": "ASM-001",
+      "kind": "assumption",
+      "statement": "Room opening hours are the library opening hours.",
+      "origin": "assumed",
+      "source": ""
+    }
+  ],
+  "issues": [
+    {
+      "id": "ISS-001",
+      "kind": "missing_information",
+      "severity": "important",
+      "status": "resolved",
+      "requirement_ids": ["FR-001"],
+      "description": "The maximum number of bookings per student was not stated.",
+      "missing_information": "Booking limit per student.",
+      "question": "How many future bookings may one student hold?",
+      "suggestion": "2 bookings.",
+      "resolution": "User confirmed a limit of 2 in round 1 (BRL-001)."
+    },
+    {
+      "id": "ISS-002",
+      "kind": "missing_information",
+      "severity": "optional",
+      "status": "open",
+      "requirement_ids": ["NFR-001"],
+      "description": "The response-time target is a suggestion and has not been confirmed.",
+      "question": "Is 2 seconds for 95% of bookings acceptable?"
+    }
+  ],
+  "user_stories": [
+    {
+      "id": "US-001",
+      "role": "student",
+      "goal": "book a study room for a time slot",
+      "benefit": "I have a quiet place to study",
+      "requirement_ids": ["FR-001"],
+      "priority": "must"
+    },
+    {
+      "id": "US-002",
+      "role": "student",
+      "goal": "cancel my booking",
+      "benefit": "the room becomes available to others",
+      "requirement_ids": ["FR-002"],
+      "priority": "should"
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-001"],
+      "title": "Book a free room",
+      "type": "positive",
+      "given": ["I am logged in as a student", "room R1 is free from 10:00 to 12:00"],
+      "when": ["I book room R1 from 10:00 to 12:00"],
+      "then": ["the booking is confirmed", "room R1 is shown as taken from 10:00 to 12:00"]
+    },
+    {
+      "id": "AC-002",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-001"],
+      "title": "Reject a slot longer than 3 hours",
+      "type": "boundary",
+      "given": ["I am logged in as a student"],
+      "when": ["I try to book a room for 3 hours and 1 minute"],
+      "then": ["the booking is rejected with the message 'Maximum 3 hours'"]
+    },
+    {
+      "id": "AC-003",
+      "story_id": "US-002",
+      "requirement_ids": ["FR-002"],
+      "title": "Cannot cancel after start",
+      "type": "negative",
+      "given": ["my booking started 5 minutes ago"],
+      "when": ["I try to cancel it"],
+      "then": ["the cancellation is rejected"]
+    }
+  ],
+  "quality_assessments": [
+    {
+      "requirement_id": "FR-001",
+      "scores": {"clarity": 2, "completeness": 2, "feasibility": 2},
+      "reasons": {
+        "clarity": "Single action with a clear actor and object.",
+        "completeness": "Slot length limits are stated.",
+        "feasibility": "Standard booking functionality."
+      }
+    },
+    {
+      "requirement_id": "NFR-001",
+      "scores": {"clarity": 2, "completeness": 1, "feasibility": null},
+      "reasons": {
+        "clarity": "Measurable fit criterion.",
+        "completeness": "Target not yet confirmed by the user."
+      }
+    }
+  ]
+}

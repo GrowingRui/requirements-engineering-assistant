@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Origin rules", "overview": "", "mode": "interactive"},
+  "requirements": [
+    {"id": "FR-001", "type": "functional", "title": "Approved assumption",
+     "description": "Users can export data.", "priority": "must",
+     "origin": "assumed", "status": "approved", "source": "guess"},
+    {"id": "FR-002", "type": "functional", "title": "Unsourced confirmation",
+     "description": "Users can import data.", "priority": "must",
+     "origin": "confirmed", "status": "draft", "source": "  "},
+    {"id": "FR-003", "type": "functional", "title": "Approved suggestion",
+     "description": "Users can share data.", "priority": "could",
+     "origin": "suggested", "status": "approved", "source": "assistant"}
+  ],
+  "rules": [
+    {"id": "CON-001", "kind": "constraint", "statement": "Runs on Android.",
+     "origin": "confirmed", "source": ""}
+  ]
+}
