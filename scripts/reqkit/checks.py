@@ -112,12 +112,22 @@ def _compile(terms: Iterable[str]) -> re.Pattern:
 _VAGUE_RE = _compile(VAGUE_TERMS)
 _WEAK_RE = _compile(WEAK_PHRASES)
 
+# Vague terms that are precise in a fixed phrase: "at most 10 MB" is a bound.
+_PRECISE_BEFORE = {"most": re.compile(r"(?<![\w-])at\s+$", re.IGNORECASE)}
+
+
+def _is_precise(term: str, text: str, start: int) -> bool:
+    pattern = _PRECISE_BEFORE.get(term)
+    return bool(pattern and pattern.search(text, 0, start))
+
 
 def find_terms(text: str) -> List[TermMatch]:
     """Find vague terms and weak phrases in text (case-insensitive, whole words)."""
     matches: List[TermMatch] = []
     for m in _VAGUE_RE.finditer(text):
         term = m.group(1).lower()
+        if _is_precise(term, text, m.start()):
+            continue
         matches.append(TermMatch(term, "vague", VAGUE_TERMS[term], m.start(), m.end()))
     for m in _WEAK_RE.finditer(text):
         term = m.group(1).lower()

@@ -52,6 +52,11 @@ class TermScannerTest(unittest.TestCase):
     def test_common_words_are_not_flagged(self):
         self.assertEqual(find_terms("Show the available rooms."), [])
 
+    def test_at_most_is_a_bound_not_vague(self):
+        self.assertEqual(find_terms("A photo of at most 10 MB, At  most 3 per day."), [])
+        self.assertEqual([t.term for t in find_terms("Most users and what most people want.")], ["most", "most"])
+        self.assertEqual([t.term for t in find_terms("Show the format most users expect.")], ["most"])
+
     def test_scan_text_reports_line_and_column(self):
         results = scan_text("First line is fine.\nThe app should be fast.")
         self.assertEqual(len(results), 1)
