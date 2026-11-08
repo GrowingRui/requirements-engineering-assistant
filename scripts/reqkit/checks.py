@@ -273,7 +273,8 @@ def _strings(value: Any) -> List[str]:
     return [x for x in value if isinstance(x, str)] if isinstance(value, list) else []
 
 
-def _req_text(req: Dict[str, Any]) -> str:
+def requirement_text(req: Dict[str, Any]) -> str:
+    """The text that vague-word and similarity checks look at: title and description."""
     return f"{req.get('title', '')}. {req.get('description', '')}"
 
 
@@ -312,7 +313,7 @@ def lint(doc: Dict[str, Any]) -> List[Finding]:
     # 1. Vague terms / weak phrases in requirements.
     for req in active:
         rid = req["id"]
-        terms = find_terms(_req_text(req))
+        terms = find_terms(requirement_text(req))
         if not terms or _has_fit_criterion(req) or "ambiguity" in tracked.get(rid, set()):
             continue
         names = sorted({t.term for t in terms})
@@ -353,7 +354,7 @@ def lint(doc: Dict[str, Any]) -> List[Finding]:
         pair = frozenset((a["id"], b["id"]))
         if pair in already_paired:
             continue
-        ta, tb = _req_text(a), _req_text(b)
+        ta, tb = requirement_text(a), requirement_text(b)
         score = similarity(ta, tb)
         if score < OVERLAP_THRESHOLD or len(_content_tokens(ta) & _content_tokens(tb)) < MIN_SHARED_WORDS:
             continue
@@ -428,7 +429,7 @@ def lint(doc: Dict[str, Any]) -> List[Finding]:
     #    document already covers it anywhere, or when it is explicitly out of scope.
     project = doc.get("project") if isinstance(doc.get("project"), dict) else {}
     scope_out = "\n".join(_strings(project.get("scope_out")))
-    corpus_parts: List[str] = [_req_text(r) + " " + str(r.get("fit_criterion", "")) for r in reqs]
+    corpus_parts: List[str] = [requirement_text(r) + " " + str(r.get("fit_criterion", "")) for r in reqs]
     corpus_parts += [str(r.get("statement", "")) for r in _items(doc, "rules")]
     corpus_parts += [f"{i.get('description', '')} {i.get('missing_information', '')} {i.get('question', '')}"
                      for i in issues]
@@ -440,7 +441,7 @@ def lint(doc: Dict[str, Any]) -> List[Finding]:
     for topic, triggers, coverage in MISSING_INFO_TOPICS:
         if _contains_any(scope_out, triggers) or _contains_any(corpus, coverage):
             continue
-        hits = tuple(r["id"] for r in active if _contains_any(_req_text(r), triggers))
+        hits = tuple(r["id"] for r in active if _contains_any(requirement_text(r), triggers))
         if hits:
             out.append(Finding("hint", "possibly_missing", "document",
                                f"{', '.join(hits)} {'mentions' if len(hits) == 1 else 'mention'} this area but nothing covers {topic}. "
