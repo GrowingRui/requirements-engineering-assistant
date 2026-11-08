@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Rock ID (non-functional)", "overview": "", "mode": "automatic"},
+  "requirements": [
+    {
+      "id": "NFR-001",
+      "type": "non_functional",
+      "title": "Identification response time",
+      "description": "Identification results shall be shown quickly.",
+      "priority": "must",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    },
+    {
+      "id": "NFR-002",
+      "type": "non_functional",
+      "title": "Reliable service",
+      "description": "The identification service shall be reliable.",
+      "priority": "should",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    }
+  ]
+}

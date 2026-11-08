@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Rock ID (missing information)", "overview": "", "mode": "interactive"},
+  "requirements": [
+    {
+      "id": "FR-001",
+      "type": "functional",
+      "title": "Upload a rock photo",
+      "description": "After they log in, users shall upload a photo of a rock to their collection.",
+      "priority": "must",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    },
+    {
+      "id": "FR-002",
+      "type": "functional",
+      "title": "Share a collection",
+      "description": "Users shall share their collection with other users by link.",
+      "priority": "should",
+      "origin": "confirmed",
+      "status": "approved",
+      "source": "user input"
+    }
+  ],
+  "issues": [
+    {
+      "id": "ISS-001",
+      "kind": "missing_information",
+      "severity": "critical",
+      "status": "open",
+      "requirement_ids": ["FR-002"],
+      "description": "It is not stated who can open a shared link.",
+      "question": "Can anyone with the link see the collection?"
+    }
+  ]
+}

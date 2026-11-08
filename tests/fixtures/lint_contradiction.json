@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Rock ID (contradiction)", "overview": "", "mode": "automatic"},
+  "requirements": [
+    {
+      "id": "FR-001",
+      "type": "functional",
+      "title": "Offline identification",
+      "description": "The app shall identify rocks without an internet connection.",
+      "priority": "must",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    },
+    {
+      "id": "FR-002",
+      "type": "functional",
+      "title": "Cloud identification",
+      "description": "The app shall identify rocks using the cloud model over an internet connection.",
+      "priority": "must",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Rock ID (roles)", "overview": "", "mode": "automatic"},
+  "stakeholders": [
+    {
+      "id": "SH-001",
+      "name": "Collector",
+      "description": "Hobbyist who identifies and collects rocks.",
+      "permissions": ["add rocks to own collection", "delete rocks from own collection"],
+      "origin": "confirmed"
+    },
+    {
+      "id": "SH-002",
+      "name": "Administrator",
+      "description": "Maintains the rock reference catalogue.",
+      "origin": "assumed"
+    },
+    {
+      "id": "SH-003",
+      "name": "Geology teacher",
+      "description": "Reviews identifications made by students.",
+      "origin": "suggested"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FR-001",
+      "type": "functional",
+      "title": "Edit reference catalogue",
+      "description": "An administrator shall be able to edit entries in the rock reference catalogue.",
+      "priority": "should",
+      "origin": "assumed",
+      "status": "draft",
+      "source": "",
+      "stakeholders": ["SH-002"]
+    }
+  ]
+}

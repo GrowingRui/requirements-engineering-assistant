@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Rock ID (duplicate)", "overview": "", "mode": "automatic"},
+  "requirements": [
+    {
+      "id": "FR-001",
+      "type": "functional",
+      "title": "Identify rock from photo",
+      "description": "The app shall identify the rock type from a photo taken by the user.",
+      "priority": "must",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    },
+    {
+      "id": "FR-002",
+      "type": "functional",
+      "title": "Rock identification from photo",
+      "description": "The app shall identify the rock type from a photo that the user has taken.",
+      "priority": "must",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    },
+    {
+      "id": "FR-003",
+      "type": "functional",
+      "title": "Delete rock from collection",
+      "description": "The user shall be able to delete a rock from their collection.",
+      "priority": "should",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    }
+  ]
+}

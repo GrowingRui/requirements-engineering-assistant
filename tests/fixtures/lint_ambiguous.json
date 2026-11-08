@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "project": {"name": "Rock ID (ambiguous)", "overview": "", "mode": "automatic"},
+  "requirements": [
+    {
+      "id": "FR-001",
+      "type": "functional",
+      "title": "Identify a rock",
+      "description": "The app shall identify a rock from a photo fast and be user-friendly.",
+      "priority": "must",
+      "origin": "assumed",
+      "status": "draft",
+      "source": ""
+    },
+    {
+      "id": "NFR-001",
+      "type": "non_functional",
+      "title": "Image formats",
+      "description": "The app shall accept JPEG, PNG, etc.",
+      "priority": "should",
+      "origin": "assumed",
+      "status": "draft",
+      "source": "",
+      "fit_criterion": "JPEG and PNG files up to 10 MB are accepted"
+    }
+  ],
+  "user_stories": [
+    {
+      "id": "US-001",
+      "role": "collector",
+      "goal": "identify a rock from a photo",
+      "benefit": "I know what I found",
+      "requirement_ids": ["FR-001"],
+      "priority": "must"
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-001"],
+      "title": "Result is shown",
+      "type": "positive",
+      "given": ["I have taken a photo of a rock"],
+      "when": ["I submit the photo"],
+      "then": ["the rock type is shown quickly"]
+    },
+    {
+      "id": "AC-002",
+      "story_id": "US-001",
+      "requirement_ids": ["FR-001"],
+      "title": "Unreadable photo",
+      "type": "negative",
+      "given": ["the photo is completely dark"],
+      "when": ["I submit the photo"],
+      "then": ["the error 'Photo too dark' is shown and the confidence threshold is not applied"]
+    }
+  ]
+}
